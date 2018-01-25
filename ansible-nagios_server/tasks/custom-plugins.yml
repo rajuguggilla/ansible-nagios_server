@@ -1,0 +1,36 @@
+---
+
+- name: Download a script for monitor number of open files
+  get_url: 
+     url: https://exchange.nagios.org/components/com_mtree/attachment.php?link_id=3328&cf_id=24
+     dest: "{{ nagios_plugins_dir }}/check_open_files.pl"
+     mode: 0755
+     
+- name: Modifying the  nagios plugins dir path in check_open_files.pl file
+  lineinfile:
+     dest: "{{ nagios_plugins_dir }}/check_open_files.pl"
+     regexp: '^use lib'
+     line: 'use lib "{{ nagios_plugins_dir }}";'
+
+- name: Download a script for monitor cpu usage 
+  get_url: 
+     url: https://exchange.nagios.org/components/com_mtree/attachment.php?link_id=910&cf_id=24 
+     dest: "{{ nagios_plugins_dir }}/check_cpu.sh"
+     mode: 0755
+
+- name: Download a script for monitor memory usage
+  get_url:
+     url: https://exchange.nagios.org/components/com_mtree/attachment.php?link_id=4174&cf_id=24
+     dest: "{{ nagios_plugins_dir }}/check_mem"
+     mode: 0755
+
+- name: Download a script for monitor any service
+  get_url:
+     url: https://raw.githubusercontent.com/jonschipp/nagios-plugins/master/check_service.sh
+     dest: "{{ nagios_plugins_dir }}/check_service.sh"
+     mode: 0755
+
+- name: Converting file format to unix, Due to bad interpreter issue in check_cpu.sh file
+  command: "dos2unix check_cpu.sh chdir={{ nagios_plugins_dir }}"
+#  args:
+#     chdir: "{{ nagios_plugins_dir }}

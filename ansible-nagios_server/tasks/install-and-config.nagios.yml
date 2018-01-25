@@ -1,0 +1,60 @@
+---
+
+- name: Include OS specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Download nagios core
+  get_url:
+    url: http://prdownloads.sourceforge.net/sourceforge/nagios/nagios-4.2.0.tar.gz
+    dest: /opt/
+
+- name: Unarchive the downloaded nagios-core tar ball
+  unarchive:
+    src: /opt/nagios-{{ nagios_version }}.tar.gz 
+    dest: /opt/
+    remote_src: yes
+    copy: no 
+
+- name: Compiling the nagios-core source
+  command: ./configure --with-httpd-conf={{ apache_conf_dir }}/sites-enabled --with-command-group=nagios 
+  args:
+     chdir: "{{ nagios_build_dir }}"
+
+- name: Compiling by make all
+  expect:
+    command: make all 
+    chdir: "{{ nagios_build_dir }}"
+    responses:
+        'replace LICENSE\? \[y\]es, \[n\]o, \[A\]ll, \[N\]one, \[r\]ename:': 'n' 
+        'replace d3.js\? \[y\]es, \[n\]o, \[A\]ll, \[N\]one, \[r\]ename:': 'n' 
+        'replace d3.min.js\? \[y\]es, \[n\]o, \[A\]ll, \[N\]one, \[r\]ename:': 'n' 
+
+- name: installs the binary files, CGIs, and HTML files.
+  command: make install
+  args:
+     chdir: "{{ nagios_build_dir }}"
+
+- name: Install service or daemon files
+  command: make install-init
+  args:
+     chdir: "{{ nagios_build_dir }}"
+
+- name: Install command mode
+  command: make install-commandmode
+  args:
+     chdir: "{{ nagios_build_dir }}"
+  
+- name: Install configuration files
+  command: make install-config
+  args:
+     chdir: "{{ nagios_build_dir }}"
+
+- include: install-and-config-apache.yml
+
+- name: Create nagiosadmin user account
+  htpasswd:
+     path: "{{ nagios_conf_dir }}/htpasswd.users"
+     name: "{{ nagios_admin_username }}"
+     password: "{{ nagios_admin_password }}"
+  notify:
+    - start nagios server 

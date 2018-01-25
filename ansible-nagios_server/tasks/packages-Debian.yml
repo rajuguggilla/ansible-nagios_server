@@ -1,0 +1,23 @@
+---
+
+- name: Update apt-cache 
+  apt: update_cache=yes
+
+- name: Installing pre-requisite packages needed for nagios server
+  apt: pkg={{ item }} state=present
+  #apt: pkg={{ item }} state=installed
+  with_items: 
+       - autoconf 
+       - gcc
+       - libc6 
+       - make
+       - wget 
+       - unzip 
+       - apache2 
+       - php 
+       - libapache2-mod-php7.0 
+       - libgd2-xpm-dev
+       - mailutils
+       - python-passlib
+       - sysstat
+       - dos2unix

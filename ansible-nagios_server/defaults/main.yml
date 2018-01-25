@@ -1,0 +1,18 @@
+---
+# defaults file for ansible-nagios_server
+
+nagios_version: 4.2.0
+nagios_build_dir: "/opt/nagios-4.2.0"
+nagios_dir: "/usr/local/nagios"
+nagios_conf_dir: "/usr/local/nagios/etc"
+nagios_plugins_dir: /usr/local/nagios/libexec
+
+nagios_server_ip: 172.31.45.22 
+nagios_server_hostname: staging-nagios
+
+nagios_admin_username: nagiosadmin
+nagios_admin_password: worksmart
+
+## below 1 -- indicates that 1 minute and this value should be minutes only
+normal_check_interval: 1
+retry_check_interval: 1

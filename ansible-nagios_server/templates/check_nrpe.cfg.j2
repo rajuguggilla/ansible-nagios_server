@@ -1,0 +1,35 @@
+define command {
+ command_name    check_nrpe
+ command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
+ }
+
+define command {
+ command_name    check_nrpe_1arg
+ command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$ -a $ARG2$
+ }
+
+define command {
+ command_name    check_nrpe_2arg
+ command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$ -a $ARG2$ $ARG3$
+ }
+
+define command {
+ command_name    check_nrpe_3arg
+ command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$ -a $ARG2$ $ARG3$ $ARG4$
+ }
+
+define command {
+ command_name    check_nrpe_4arg
+ command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$ -a $ARG2$ $ARG3$ $ARG4$ $ARG5$
+ }
+
+define command {
+ command_name    check_nrpe_6arg
+ command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$ -a $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$
+ }
+
+define command {
+ command_name    check_nrpe_8arg
+ command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$ -a $ARG2$ $ARG3$ $ARG4$ $ARG5$ $ARG6$ $ARG7$ $ARG8$ $ARG9$
+ }
+

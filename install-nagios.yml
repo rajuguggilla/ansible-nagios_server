@@ -1,0 +1,6 @@
+---
+- name: Complete installation of nagios core 
+  hosts: staging-nagios 
+  become: true
+  roles:
+     - ansible-nagios_server 

@@ -1,0 +1,24 @@
+---
+#
+- name: Install apache config files
+  command: make install-webconf
+  args: 
+     chdir: "{{ nagios_build_dir }}"
+
+- name: Configure apache Settings
+  apache2_module:
+     state: present
+     name: "{{ item }}"
+  with_items:
+     - rewrite
+     - cgi
+
+## need to add handlers  above for apache2  to restart and reload
+
+- name: Ensure ufw is installed
+  apt: name=ufw state=installed
+
+- name: Configure firewall for apache2
+  ufw: rule=allow port=80 state=reloaded
+  notify: 
+    - restart apache2 server

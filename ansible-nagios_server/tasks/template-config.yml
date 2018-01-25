@@ -1,0 +1,28 @@
+---
+
+- name: Adding nagios-server host and service monitoring file
+  template: 
+     src: templates/server-def.cfg.j2
+     dest: "{{ nagios_conf_dir }}/objects/nagios-server.cfg"
+
+- name: Adding check_nrpe.cfg file for all definitions of check_nrpe commands
+  template:
+     src: templates/check_nrpe.cfg.j2
+     dest: "{{ nagios_conf_dir }}/objects/check_nrpe.cfg"
+
+- name: Avoiding already created file for nagios server host monitoring file
+  command: mv objects/localhost.cfg objects/localhost.cfg.tmp
+  args:
+     chdir: "{{ nagios_conf_dir }}"
+
+- name: updating nagios.cfg file with the newly created files for host monitoring
+  replace:
+     dest: "{{ nagios_conf_dir }}/nagios.cfg"
+     regexp: "cfg_file={{ nagios_conf_dir }}/objects/localhost.cfg"
+     replace: "cfg_file={{ nagios_conf_dir }}/objects/nagios-server.cfg"
+
+- name: adding new file path of check_nrpe.cfg, which consists of command defintions of check_nrpe
+  lineinfile:
+     dest: "{{ nagios_conf_dir }}/nagios.cfg"
+     insertafter: 'nagios-server.cfg'
+     line: "cfg_file={{ nagios_conf_dir }}/objects/check_nrpe.cfg" 

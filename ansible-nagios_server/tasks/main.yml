@@ -1,0 +1,40 @@
+---
+
+# tasks file for ansible-nagios_server
+# installing packages, which are needed for the nagios installation and in running
+
+- name: Installing dependent packages
+  include: "packages-{{ ansible_os_family }}.yml"
+
+# creating user for nagios 
+- name: Create user and group for nagios 
+  user: 
+    name: nagios
+    createhome: no
+    groups: www-data
+
+# using the OS specific variables
+- name: Include OS specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+# download, compile and install the nagios server
+- name: Download and compile nagios-core source 
+  include: "install-and-config.nagios.yml"
+#  notify: 
+#    - start nagios server
+
+# update the localhost.cfg file with the new one
+# and also adding defitions for check_nrpe commands
+- name: updating the localhost.cfg and nrpr defintions 
+  include: "template-config.yml"
+
+# downloading few plugins for cpu usage, memory usage and any service monitoring
+- name: Downloading plugins for CPU Usage, Memory and open files
+  include: "custom-plugins.yml"
+
+# adding the defintions for downloaded custom plugins in the commands.cfg file
+- name: command defintions for downloaded plugins
+  include: "configure-commands.yml"
+#  notify:
+#    - restart nagios-server
+

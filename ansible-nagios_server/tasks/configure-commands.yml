@@ -1,0 +1,33 @@
+---
+
+- name: adding definitions for check_cpu, check_memory and check_openfiles
+  blockinfile: 
+     dest: "{{ nagios_conf_dir }}/objects/commands.cfg"
+     insertafter: EOF
+     block: | 
+       
+       # 'check_cpu' command definition"
+       define command{
+                command_name    check_cpu
+                command_line    $USER1$/check_cpu.sh -uw $ARG1$ -uc $ARG2$
+                }
+     
+    
+       # 'check_memory' command definition
+       define command{
+                command_name    check_memory
+                command_line    $USER1$/check_mem -w $ARG1$ -c $ARG2$ -W $ARG3$ -C $ARG4$
+                }
+      
+     
+       # check no. of open files
+       define command{
+                command_name    check_open-files
+                command_line    $USER1$/check_open_files.pl -w $ARG1$ -c $ARG2$
+                }
+
+- name: daemon reload
+  command: systemctl daemon-reload     
+  notify:
+    - restart nagios-server
+ 
