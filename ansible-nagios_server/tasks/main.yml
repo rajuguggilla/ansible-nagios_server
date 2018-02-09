@@ -25,7 +25,7 @@
 
 # update the localhost.cfg file with the new one
 # and also adding defitions for check_nrpe commands
-- name: updating the localhost.cfg and nrpr defintions 
+- name: updating the localhost.cfg and nrpe defintions 
   include: "template-config.yml"
 
 # downloading few plugins for cpu usage, memory usage and any service monitoring
